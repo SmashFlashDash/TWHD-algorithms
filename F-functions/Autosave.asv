@@ -1,0 +1,132 @@
+classdef Autosave
+   
+    properties (Access=public)
+        MainDir
+        max_folders = 10
+    end
+
+    methods
+        function obj = Autosave(dir)
+            if nargin == 1
+                obj.MainDir = obj.getDir(pwd(), dir);
+            else
+                error('В Autosave надо передать директорию автосохранения')
+            end
+        end
+
+        function obj = autosave_set_main(obj, dir) 
+            obj.dir = dir;
+        end
+
+        function autosave_to_folder(obj, dir, n_file)
+            % функция создает директории
+            % чистит их если переполнено кличество директорий
+            % создает под директории с номерами и описанием файлов
+
+            % num_file - select_file(i_fl)
+
+            isDirMaked = false;
+            num_file = num2str(n_file);
+            AutosaveFolder = obj.getDir(obj.MainDir, dir);
+            if not(exist(obj.MainDir, "dir"))
+                mkdir(obj.MainDir)
+            end
+            if not(exist(AutosaveFolder, "dir"))
+                mkdir(AutosaveFolder)
+                
+                FolderExits = false;
+                for i = 1 : obj.max_folders
+                    Folder = sprintf("%s %s\\f%s %s_%d", AutoSaveFolder, subFolder1, num_file, subFolder2, is);
+                    if not(exist(Folder, "dir"))
+                        FolderExits = true;
+                        break
+                    end
+                end
+                if not(FolderExits)
+                    AutoSaveFolderBase = char(sprintf("%s %s_temp", AutoSaveFolder, subFolder1));
+                    try
+                        rmdir(AutoSaveFolderBase, 's');
+                    catch
+                    end
+                end
+
+
+
+                % получить под директории
+                % генерировать имена по количествам и проверять есть ли
+                % такая
+                % если директория не была создана то ремув дир
+
+                % file=167 T=8.0 R=2 preF=on i=1...10
+                % T=2.0-9.0 Desc=
+                % после i 10 все директорри rmdir
+            end
+
+        end
+    end
+    
+    methods(Access=private)
+    end
+
+    methods (Static)
+        function path = getDir(varargin)
+            % получить path 
+            remove_index = [];
+            for i = 1 : nargin
+                dir = varargin{i};
+                if startsWith(dir, '\') || startsWith(dir, '/')
+                    error('не использовать filesep')
+                elseif strcmp(dir, "") || strcmp(dir, '')
+                    remove_index = [remove_index, i];
+                end
+            end
+            varargin(:,remove_index) = [];
+            path = strjoin(varargin, filesep);
+        end
+
+    end
+
+end
+
+
+
+% %% Очистить или создать dir
+%         isDirMaked = false;
+%         num_file = num2str(select_file(i_fl));
+%         AutoSaveFolder = AutoSaveFolderMain;
+%         if i==1
+%             isDirMainMaked = false;
+%             for is=1:10
+%                     AutoSaveFolderBase = char(sprintf("%s %s\\f%s %s_%d", AutoSaveFolder, subFolder1, num_file, subFolder2, is));
+%                     if not(exist(AutoSaveFolderBase, 'dir'))
+%                         isDirMainMaked = true;
+%                         break;
+%                     end
+%             end
+%             if not(isDirMainMaked)
+%                 AutoSaveFolderBase = char(sprintf("%s %s_temp", AutoSaveFolder, subFolder1));
+%                 try
+%                     rmdir(AutoSaveFolderBase, 's');
+%                 catch
+%                 end
+%             end
+%         end
+%         for is = 1 : 10
+%             AutoSaveFolderSub2 = char(sprintf("\\Time-%.2f-%.2f %s _%d", AxTFrames(1), AxTFrames(end), describe, is));
+%             if not(exist([AutoSaveFolderBase AutoSaveFolderSub2], 'dir'))
+%                 isDirMaked = true;
+%                 AutoSaveFolder = [AutoSaveFolderBase AutoSaveFolderSub2];
+%                 mkdir(AutoSaveFolder)
+%                 break
+%             end
+%         end
+%         if not(isDirMaked)
+%             AutoSaveFolder = [AutoSaveFolderBase AutoSaveFolderSub(1:end-1) '_temp' ];
+%             try
+%                 rmdir(AutoSaveFolder, 's')
+%             catch
+%             end   
+%             mkdir(AutoSaveFolder)
+%         end
+%         %% Отображение в командной строке
+%         print_text(AutoSaveFolder, num_file, describe)

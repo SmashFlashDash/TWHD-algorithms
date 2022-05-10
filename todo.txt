@@ -1,0 +1,21 @@
+переписать исполняемые файлы на использвоание директорий директории
+
+создать файл с функцией по импорту директорий
+F-alg, F-func
+
+создайть функцию автосейва или класс
+в нее передавать директорию, и затем все автосейвы должны
+писать туда, также каждый автосей ередает поддиректорию
+
+проверить что DataAll ссылатеся на те файлы
+
+addpath
+addpath('matlab/myfiles')
+addpath(genpath('/libs/latexfigure/'));
+addpath('./libs/latexfigure/');
+
+currentFolderContents = dir(pwd);      %Returns all files and folders in the current folder
+currentFolderContents (~[currentFolderContents.isdir]) = [];  %Only keep the folders
+for i = 3:length(currentFolderContents)           %Start with 3 to avoid '.' and '..' 
+   addpath(['./' currentFolderContents(i).name]) 
+end
